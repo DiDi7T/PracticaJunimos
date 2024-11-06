@@ -33,6 +33,7 @@ public class Player {
     private boolean down;
     private boolean right;
     private boolean left;
+    private boolean axe;
 
     public Player(Canvas canvas) {
         this.canvas = canvas;
@@ -75,7 +76,7 @@ public class Player {
             graphicsContext.drawImage(runR.get(frame%3), position.getX(), position.getY());
             frame++;
         } else if (state==2) {
-            graphicsContext.drawImage(runL.get(frame%3), position.getX(), position.getY());
+            graphicsContext.drawImage(runL.get(frame%2), position.getX(), position.getY());
             frame++;
         } else if (state==3) {
             graphicsContext.drawImage(runU.get(frame%2), position.getX(), position.getY());
@@ -107,6 +108,10 @@ public class Player {
             case DOWN -> {state = 4; down = true;}
             case RIGHT -> {state= 1; right = true;}
             case LEFT -> {state = 2; left = true;}
+            case W -> {state = 3; up = true; }
+            case S -> {state = 4; down = true;}
+            case D -> {state= 1; right = true;}
+            case A -> {state = 2; left = true;}
         }
     }
 
@@ -117,7 +122,31 @@ public class Player {
             case DOWN -> {state = 0; down = false;}
             case RIGHT -> {state = 0; right = false;}
             case LEFT -> {state= 0; left = false;}
+            case W -> {state= 0; up = false;}
+            case S -> {state = 0; down = false;}
+            case D -> {state = 0; right = false;}
+            case A -> {state= 0; left = false;}
         }
     }
 
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position){
+        this.position = position;
+    }
+
+
+    public void resetStates(){
+        state = 0;
+        up = false;
+        down = false;
+        left = false;
+        right = false;
+    }
+
+    public void printStates(){
+        System.out.println("states:" + state + " positions: " + up + " " + down + " " + left + " " + right);
+    }
 }

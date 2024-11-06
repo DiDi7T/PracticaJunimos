@@ -7,9 +7,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import org.icesi.junimosvalley.screens.BaseScreen;
 import org.icesi.junimosvalley.screens.ScreenA;
+import org.icesi.junimosvalley.screens.ScreenB;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class HelloController implements Initializable {
@@ -17,24 +20,28 @@ public class HelloController implements Initializable {
     @FXML
     private Canvas canvas;
     private GraphicsContext graphicsContext;
-    private ScreenA screen;
+    private ArrayList<BaseScreen> screens;
+    public static int SCREEN = 0;
     private boolean isRunning;
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.graphicsContext = canvas.getGraphicsContext2D();
-        screen = new ScreenA(canvas);
+        screens = new ArrayList<>(2);
+        screens.add(new ScreenA(canvas));
+        screens.add(new ScreenB(canvas));
+
         initActions();
         isRunning = true;
         // Hilo
         new Thread(() -> { // Runable -> lambda
             while (isRunning){
                 Platform.runLater( () -> {
-                    screen.paint();
+                    screens.get(SCREEN).paint();
                 });
                 try {
-                    Thread.sleep(600);
+                    Thread.sleep(200);
                 }catch (InterruptedException e){
                     e.printStackTrace();
                 }
@@ -48,11 +55,11 @@ public class HelloController implements Initializable {
 
     public void initActions(){
         canvas.setOnKeyPressed(event -> {
-            screen.onKeyPressed(event);
+            screens.get(SCREEN).onKeyPressed(event);
         });
 
         canvas.setOnKeyReleased(event -> {
-            screen.onKeyReleased(event);
+            screens.get(SCREEN).onKeyReleased(event);
         });
     }
 }
